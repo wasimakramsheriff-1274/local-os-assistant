@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "local-os-brain": {
+      "command": "python",
+      "args": [
+        "C:/Users/acer/.gemini/antigravity-ide/scratch/mcp_local_brain/server.py"
+      ]
+    }
+  }
+}

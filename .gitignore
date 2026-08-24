@@ -1,0 +1,23 @@
+# Environment variables (API Keys)
+.env
+*.env
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# Databases
+brain.db
+*.db
+*.sqlite
+
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+
+# IDE & System files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
