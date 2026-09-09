@@ -70,6 +70,25 @@ async def run_gemini_repl(session: ClientSession, available_tools: List[Any], sy
 
     chat = gemini_client.chats.create(model="gemini-3.6-flash", config=config)
 
+    async def send_with_retry(msg_content: Any, max_retries: int = 3):
+        import re
+        for attempt in range(max_retries):
+            try:
+                return chat.send_message(msg_content)
+            except Exception as exc:
+                err_str = str(exc)
+                if ("429" in err_str or "RESOURCE_EXHAUSTED" in err_str) and attempt < max_retries - 1:
+                    match = re.search(r"retry in (\d+(?:\.\d+)?)s", err_str, re.IGNORECASE)
+                    if not match:
+                        match = re.search(r"retryDelay': '(\d+)s", err_str, re.IGNORECASE)
+                    
+                    wait_sec = float(match.group(1)) + 1.0 if match else 15.0
+                    if wait_sec <= 65.0:
+                        print(f"\n[!] Rate limit reached. Auto-waiting {int(wait_sec)}s for quota reset (attempt {attempt + 1}/{max_retries})...")
+                        await asyncio.sleep(wait_sec)
+                        continue
+                raise exc
+
     while True:
         try:
             user_input = input("You > ").strip()
@@ -79,7 +98,7 @@ async def run_gemini_repl(session: ClientSession, available_tools: List[Any], sy
                 print("\nExiting Assistant session. Goodbye!")
                 break
 
-            response = chat.send_message(user_input)
+            response = await send_with_retry(user_input)
 
             while response.function_calls:
                 for call in response.function_calls:
@@ -103,7 +122,7 @@ async def run_gemini_repl(session: ClientSession, available_tools: List[Any], sy
                         name=tool_name,
                         response={"result": result_text}
                     )
-                    response = chat.send_message(function_response_part)
+                    response = await send_with_retry(function_response_part)
 
             if response.text:
                 print(f"\nBrain > {response.text}\n")
@@ -111,7 +130,15 @@ async def run_gemini_repl(session: ClientSession, available_tools: List[Any], sy
         except KeyboardInterrupt:
             print("\nSession interrupted. Type 'exit' to quit.")
         except Exception as e:
-            print(f"\n[!] Error during execution loop: {str(e)}\n")
+            err_str = str(e)
+            if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str:
+                print("\n[!] ERROR: Gemini API Quota / Rate Limit Exceeded (429 RESOURCE_EXHAUSTED).")
+                print("    - Free tier limit reached.")
+                print("    - Fix 1: Wait a minute for quota reset, then try your request again.")
+                print("    - Fix 2: Get a fresh key from https://aistudio.google.com and update GEMINI_API_KEY in .env.")
+                print("    - Fix 3: Or set OPENAI_API_KEY in your .env file.\n")
+            else:
+                print(f"\n[!] Error during execution loop: {err_str}\n")
 
 
 async def run_openai_repl(session: ClientSession, available_tools: List[Any], system_prompt: str, openai_api_key: str):
@@ -259,8 +286,10 @@ async def run_assistant():
                     "You remember cross-session context stored in SQLite memory.\n\n"
                     "RULES:\n"
                     "1. Always prefer using your local system tools to perform actions when asked.\n"
-                    "2. Automatically check memory when relevant or save important context/preferences.\n"
-                    "3. For terminal execution, double-check dangerous operations before executing.\n\n"
+                    "2. To write or edit code/files on disk, use `write_local_file` with the full file content and path.\n"
+                    "3. To execute code or run scripts, use `execute_terminal_command`.\n"
+                    "4. Automatically check memory when relevant or save important context/preferences.\n"
+                    "5. For terminal execution, double-check dangerous operations before executing.\n\n"
                     f"CURRENT STORED MEMORY HYDRATION:\n{initial_memories}"
                 )
 
