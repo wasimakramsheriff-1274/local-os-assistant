@@ -1,8 +1,8 @@
-# Local OS Assistant & Second Brain (MCP & OpenAI / ULTRON Voice Assistant)
+# Local OS Assistant & Second Brain (MCP & OpenAI / JARVIS Voice Assistant)
 
 An autonomous, cross-platform local desktop assistant powered by the **Model Context Protocol (MCP)** and **OpenAI (`gpt-4o`)**. It executes local system commands safely, reads and writes files, monitors hardware diagnostics, and remembers cross-session project context using a local SQLite database (`brain.db`).
 
-Now includes **ULTRON**, a full-duplex hands-free Voice Assistant featuring real-time wake word listening ("Ultron"), offline speech recognition, and neural voice response playback.
+Now includes **JARVIS**, a full-duplex hands-free Voice Assistant featuring real-time wake word listening ("JARVIS"), offline speech recognition, and neural voice response playback.
 
 ---
 
@@ -91,7 +91,7 @@ You > What are my current system metrics?
 Brain > Your system is running at 15.4% CPU usage with 12.2 GB / 32 GB RAM used and 78% battery remaining.
 ```
 
-### Option B: ULTRON Hands-Free Voice Assistant
+### Option B: JARVIS Hands-Free Voice Assistant
 
 Start the full-duplex hands-free voice assistant:
 
@@ -100,10 +100,10 @@ python voice_client.py
 ```
 
 Example voice interaction:
-1. Say **"Ultron"** into your microphone.
+1. Say **"JARVIS"** into your microphone.
 2. Listen for the audio cue: *"I am listening..."*
 3. Speak your request (e.g. *"What are my current system metrics?"* or *"Open google.com in my browser"*).
-4. ULTRON transcribes your speech offline, executes the requested MCP tool, and speaks the response back in a deep, authoritative voice.
+4. JARVIS transcribes your speech offline, executes the requested MCP tool, and speaks the response back in a deep, authoritative voice.
 
 ### Option C: Integrate with Claude Desktop
 
