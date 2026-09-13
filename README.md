@@ -100,10 +100,11 @@ python voice_client.py
 ```
 
 Example voice interaction:
-1. Say **"JARVIS"** into your microphone.
-2. Listen for the audio cue: *"I am listening..."*
-3. Speak your request (e.g. *"What are my current system metrics?"* or *"Open google.com in my browser"*).
-4. JARVIS transcribes your speech offline, executes the requested MCP tool, and speaks the response back in a deep, authoritative voice.
+​1.Say "Jarvis" into your microphone (or press ENTER if running without Picovoice).
+​2.Listen for the voice cue: "System online boss, What are we building today?"
+3.​Speak your request (e.g., "What are my current system metrics?" or "Open google.com in my browser").
+​4.JARVIS speaks "Working on it, boss...", transcribes your speech offline, executes the requested MCP tool, speaks the response back, and finishes with "Task complete. Anything else, boss?"
+
 
 ### Option C: Integrate with Claude Desktop
 
