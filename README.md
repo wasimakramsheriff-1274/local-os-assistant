@@ -21,7 +21,7 @@ Now includes **JARVIS**, a full-duplex hands-free Voice Assistant featuring real
   - Dynamic tool discovery via MCP stdio transport.
   - Startup memory hydration from `brain.db`.
   - Persistent CLI REPL prompt (`You > ` / `Brain > `).
-- **ULTRON Hands-Free Voice Assistant (`voice_client.py`)**:
+- **Jarvis Hands-Free Voice Assistant (`voice_client.py`)**:
   - Real-time zero-CPU background wake word detection ("Ultron") via `pvporcupine`.
   - Automatic microphone speech recording with dynamic silence detection (`numpy`).
   - Offline local Speech-to-Text (STT) transcription via `faster-whisper` (`tiny.en`).
